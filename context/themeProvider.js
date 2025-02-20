@@ -7,19 +7,20 @@ export const ThemeContext = createContext();
 
 // ThemeProvider Component
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(null);
 
-  // Load theme from localStorage on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
+    document.documentElement.classList.add(savedTheme);
   }, []);
 
-  // Save theme to localStorage and apply animations
   useEffect(() => {
     localStorage.setItem("theme", theme);
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(theme);
 
-    // Smooth background and text transition
+    gsap.killTweensOf("body");
     gsap.to("body", {
       backgroundColor: theme === "light" ? "#ffffff" : "#1a202c",
       color: theme === "light" ? "#000000" : "#ffffff",
@@ -28,11 +29,10 @@ export const ThemeProvider = ({ children }) => {
     });
   }, [theme]);
 
-  // Toggle theme function
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
   };
-
+  if (theme === null) return null;
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}

@@ -2,12 +2,23 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "@/context/themeProvider";
+import { gsap } from "gsap";
+import { useEffect, useRef } from "react";
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
+  const switchRef = useRef(null);
+
+  useEffect(() => {
+    gsap.to(switchRef.current, {
+      x: theme === "light" ? 0 : 28, // Smooth sliding effect
+      duration: 0.5,
+      ease: "power2.inOut",
+    });
+  }, [theme]);
 
   return (
-    <nav className="flex items-center justify-evenly p-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white">
+    <nav className="flex items-center justify-evenly p-4 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white shadow-lg shadow-gray-700">
       {/* Left Section: Home Link */}
       <div>
         <Link href="/" className="text-lg font-semibold hover:underline">
@@ -16,7 +27,7 @@ export default function Navbar() {
       </div>
 
       {/* Middle Section: Navigation Links */}
-      <div className="flex space-x-6 px-8 py-4  rounded-full backdrop-blur-md bg-opacity-30 bg-white dark:bg-gray-900 shadow-lg">
+      <div className="flex border-[#B65001] space-x-6 px-6 py-2 rounded-full backdrop-blur-sm bg-opacity-20 bg-white dark:bg-gray-900 shadow-lg">
         <Link href="/about" className="hover:underline">
           About
         </Link>
@@ -36,33 +47,32 @@ export default function Navbar() {
         onClick={toggleTheme}
         role="button"
         aria-label="Toggle theme"
-        className="relative w-14 h-8 flex items-center cursor-pointer p-1 rounded-full bg-gray-300 dark:bg-gray-700"
+        className="relative w-16 h-8 flex items-center bg-gray-200 dark:bg-gray-700 rounded-full p-1 cursor-pointer transition-all duration-500 shadow-md"
       >
         {/* Sun Icon */}
         <Image
           src="/icons/sun.png"
           alt="Light Theme Icon"
-          width={20}
-          height={20}
-          className={`ml-1 drop-shadow-[0_0_10px_#facc15] transition-opacity duration-300 ${
+          width={24}
+          height={24}
+          className={`absolute left-1 transition-all duration-300 ${
             theme === "light" ? "opacity-100" : "opacity-0"
           }`}
         />
 
         {/* Toggle Knob */}
         <div
-          className={`absolute w-6 h-6 bg-white dark:bg-gray-900 rounded-full shadow-md transition-transform duration-300 ${
-            theme === "light" ? "translate-x-0" : "translate-x-6"
-          }`}
+          ref={switchRef}
+          className="absolute left-1 w-6 h-6 bg-white dark:bg-gray-900 rounded-full shadow-md"
         ></div>
 
         {/* Moon Icon */}
         <Image
           src="/icons/full-moon.png"
           alt="Dark Theme Icon"
-          width={20}
-          height={20}
-          className={`ml-auto mr-1 drop-shadow-[0_0_10px_#38bdf8] transition-opacity duration-300 ${
+          width={24}
+          height={24}
+          className={`absolute right-2 transition-all duration-300 ${
             theme === "dark" ? "opacity-100" : "opacity-0"
           }`}
         />

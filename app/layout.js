@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Suspense } from "react";
 import Loading from "@/components/Loading";
 import "./globals.css";
-import { ThemeProvider } from "../context/themeProvider";
+import { ThemeProvider } from "@/context/themeProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -20,7 +20,7 @@ export const metadata = {
   title: "Being Kinyua",
   description: "Showcasing my projects, skills, and achievements.",
   keywords:
-    "portfolio, web development, nextjs, tailwind, blogs, data science, AI, Machine learning, poetry, poems, art, ",
+    "portfolio, web development, nextjs, tailwind, blogs, data science, AI, Machine learning, poetry, poems, art",
   openGraph: {
     title: "My Portfolio",
     description: "Explore my portfolio and latest projects.",
@@ -39,7 +39,7 @@ export const metadata = {
     "application/ld+json": JSON.stringify({
       "@context": "https://schema.org",
       "@type": "Person",
-      name: "John Doe",
+      name: "Kinyua", // 🔹 Updated with real name
       jobTitle: "Web Developer",
       url: "https://myportfolio.com",
     }),
@@ -48,14 +48,19 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Favicon for Branding */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark:text-white dark:bg-gray-900 transition-colors duration-300`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
           <Navbar />
           <Suspense fallback={<Loading />}>
-            <main className="min-h-screen"> {children} </main>{" "}
+            <main className="min-h-screen">{children}</main>
           </Suspense>
           <Footer />
         </ThemeProvider>
